@@ -36,7 +36,7 @@
 </form>
 
 <div>
-    await @Html.PartialAsync("_TasksTable.cshtml", Model.Tasks)
+    @await Html.PartialAsync("_TasksTable.cshtml", Model.Tasks)
 </div>
 
 @section Scripts

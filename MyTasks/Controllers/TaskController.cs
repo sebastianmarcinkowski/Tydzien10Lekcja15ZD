@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyTasks.Core.Models;
 using MyTasks.Core.Models.Domains;
 using MyTasks.Core.ViewModels;
+using MyTasks.Persistence;
 using MyTasks.Persistence.Extensions;
 using MyTasks.Persistence.Repositories;
 using System;
@@ -12,7 +13,12 @@ namespace MyTasks.Controllers
 	[Authorize]
 	public class TaskController : Controller
 	{
-		private TaskRepository _taskRepository = new TaskRepository();
+		private TaskRepository _taskRepository;
+
+		public TaskController(ApplicationDbContext context)
+		{
+			_taskRepository = new TaskRepository(context);
+		}
 
 		public IActionResult Tasks()
 		{
@@ -42,7 +48,7 @@ namespace MyTasks.Controllers
 				vm.FilterTasks.CategoryId,
 				vm.FilterTasks.Title);
 
-			return PartialView("_TasksTable", vm);
+			return PartialView("_TasksTable", tasks);
 		}
 
 		public IActionResult Task(int id = 0)
@@ -110,7 +116,7 @@ namespace MyTasks.Controllers
 			{
 				var userId = User.GetUserId();
 
-				_taskRepository.Finish(
+				_taskRepository.Delete(
 					id,
 					userId);
 			}
@@ -118,9 +124,11 @@ namespace MyTasks.Controllers
 			{
 				// logging
 
-				return Json(new {
+				return Json(new
+				{
 					success = false,
-					message = ex.Message});
+					message = ex.Message
+				});
 			}
 
 			return Json(new { success = true });
