@@ -56,7 +56,6 @@ namespace MyTasks.Persistence.Repositories
 		public void Add(TaskEntity task)
 		{
 			_context.Tasks.Add(task);
-			_context.SaveChanges();
 		}
 
 		public void Update(TaskEntity task)
@@ -69,8 +68,6 @@ namespace MyTasks.Persistence.Repositories
 			taskToUpdate.IsExecuted = task.IsExecuted;
 			taskToUpdate.Term = task.Term;
 			taskToUpdate.Title = task.Title;
-
-			_context.SaveChanges();
 		}
 
 		public void Delete(int id, string userId)
@@ -82,8 +79,6 @@ namespace MyTasks.Persistence.Repositories
 					x.UserId == userId);
 
 			_context.Tasks.Remove(taskToDelete);
-
-			_context.SaveChanges();
 		}
 
 		public void Finish(int id, string userId)
@@ -95,8 +90,6 @@ namespace MyTasks.Persistence.Repositories
 					x.UserId == userId);
 
 			taskToFinish.IsExecuted = true;
-
-			_context.SaveChanges();
 		}
 	}
 }
