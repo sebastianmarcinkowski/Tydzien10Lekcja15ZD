@@ -6,6 +6,7 @@ using MyTasks.Core.ViewModels;
 using MyTasks.Persistence;
 using MyTasks.Persistence.Extensions;
 using MyTasks.Persistence.Repositories;
+using MyTasks.Persistence.Services;
 using System;
 
 namespace MyTasks.Controllers
@@ -13,19 +14,19 @@ namespace MyTasks.Controllers
 	[Authorize]
 	public class TaskController : Controller
 	{
-		private UnitOfWork _unitOfWork;
+		private readonly TaskService _taskService;
 
 		public TaskController(ApplicationDbContext context)
 		{
-			_unitOfWork = new UnitOfWork(context);
+			_taskService = new TaskService(new UnitOfWork(context));
 		}
 
 		public IActionResult Tasks()
 		{
 			var userId = User.GetUserId();
 
-			var tasks = _unitOfWork.Task.Get(userId);
-			var categories = _unitOfWork.Task.GetCategorties();
+			var tasks = _taskService.Get(userId);
+			var categories = _taskService.GetCategorties();
 
 			var vm = new TasksViewModel
 			{
@@ -42,7 +43,7 @@ namespace MyTasks.Controllers
 		{
 			var userID = User.GetUserId();
 
-			var tasks = _unitOfWork.Task.Get(
+			var tasks = _taskService.Get(
 				userID,
 				vm.FilterTasks.IsExecuted,
 				vm.FilterTasks.CategoryId,
@@ -63,7 +64,7 @@ namespace MyTasks.Controllers
 					Term = DateTime.Today
 				}
 				:
-				_unitOfWork.Task.Get(id, userId);
+				_taskService.Get(id, userId);
 
 			var vm = new TaskViewModel
 			{
@@ -72,7 +73,7 @@ namespace MyTasks.Controllers
 					"Dodawanie nowego zadania"
 					:
 					"Edytowanie zadania",
-				Categories = _unitOfWork.Task.GetCategorties()
+				Categories = _taskService.GetCategorties()
 			};
 
 			return View(vm);
@@ -94,18 +95,16 @@ namespace MyTasks.Controllers
 					"Dodawanie nowego zadania"
 					:
 					"Edytowanie zadania",
-					Categories = _unitOfWork.Task.GetCategorties()
+					Categories = _taskService.GetCategorties()
 				};
 
 				return View("Task", vm);
 			}
 
 			if (task.Id == 0)
-				_unitOfWork.Task.Add(task);
+				_taskService.Add(task);
 			else
-				_unitOfWork.Task.Update(task);
-
-			_unitOfWork.Complete();
+				_taskService.Update(task);
 
 			return RedirectToAction("Tasks");
 		}
@@ -117,7 +116,7 @@ namespace MyTasks.Controllers
 			{
 				var userId = User.GetUserId();
 
-				_unitOfWork.Task.Delete(id, userId);
+				_taskService.Delete(id, userId);
 			}
 			catch (Exception ex)
 			{
@@ -129,8 +128,6 @@ namespace MyTasks.Controllers
 					message = ex.Message
 				});
 			}
-
-			_unitOfWork.Complete();
 
 			return Json(new { success = true });
 		}
@@ -142,7 +139,7 @@ namespace MyTasks.Controllers
 			{
 				var userId = User.GetUserId();
 
-				_unitOfWork.Task.Finish(id, userId);
+				_taskService.Finish(id, userId);
 			}
 			catch (Exception ex)
 			{
@@ -154,8 +151,6 @@ namespace MyTasks.Controllers
 					message = ex.Message
 				});
 			}
-
-			_unitOfWork.Complete();
 
 			return Json(new { success = true });
 		}
