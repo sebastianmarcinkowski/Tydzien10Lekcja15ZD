@@ -1,19 +1,21 @@
-﻿using MyTasks.Persistence.Repositories;
+﻿using MyTasks.Core;
+using MyTasks.Core.Repositories;
+using MyTasks.Persistence.Repositories;
 
 namespace MyTasks.Persistence
 {
-	public class UnitOfWork
+	public class UnitOfWork : IUnitOfWork
 	{
-		private readonly ApplicationDbContext _context;
+		private readonly IApplicationDbContext _context;
 
-		public UnitOfWork(ApplicationDbContext context)
+		public UnitOfWork(IApplicationDbContext context)
 		{
 			_context = context;
 
 			Task = new TaskRepository(context);
 		}
 
-		public TaskRepository Task { get; set; }
+		public ITaskRepository Task { get; }
 
 		public void Complete()
 		{

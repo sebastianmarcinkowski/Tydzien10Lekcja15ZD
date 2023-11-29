@@ -1,16 +1,15 @@
-﻿using MyTasks.Core.Models.Domains;
-using System;
+﻿using MyTasks.Core;
+using MyTasks.Core.Models.Domains;
+using MyTasks.Core.Services;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyTasks.Persistence.Services
 {
-	public class TaskService
+	public class TaskService : ITaskService
 	{
-		private readonly UnitOfWork _unitOfWork;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public TaskService(UnitOfWork unitOfWork)
+		public TaskService(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}

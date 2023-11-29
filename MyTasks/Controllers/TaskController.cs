@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MyTasks.Core.Models;
 using MyTasks.Core.Models.Domains;
+using MyTasks.Core.Services;
 using MyTasks.Core.ViewModels;
-using MyTasks.Persistence;
 using MyTasks.Persistence.Extensions;
-using MyTasks.Persistence.Repositories;
-using MyTasks.Persistence.Services;
 using System;
 
 namespace MyTasks.Controllers
@@ -14,11 +12,11 @@ namespace MyTasks.Controllers
 	[Authorize]
 	public class TaskController : Controller
 	{
-		private readonly TaskService _taskService;
+		private readonly ITaskService _taskService;
 
-		public TaskController(ApplicationDbContext context)
+		public TaskController(ITaskService taskService)
 		{
-			_taskService = new TaskService(new UnitOfWork(context));
+			_taskService = taskService;
 		}
 
 		public IActionResult Tasks()
