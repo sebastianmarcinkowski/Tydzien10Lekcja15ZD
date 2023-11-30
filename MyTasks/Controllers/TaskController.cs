@@ -24,7 +24,7 @@ namespace MyTasks.Controllers
 			var userId = User.GetUserId();
 
 			var tasks = _taskService.Get(userId);
-			var categories = _taskService.GetCategorties();
+			var categories = _taskService.GetCategorties(userId);
 
 			var vm = new TasksViewModel
 			{
@@ -50,6 +50,11 @@ namespace MyTasks.Controllers
 			return PartialView("_TasksTable", tasks);
 		}
 
+		public IActionResult Categories()
+        {
+			return View(_taskService.GetCategorties(User.GetUserId()));
+        }
+
 		public IActionResult Task(int id = 0)
 		{
 			var userId = User.GetUserId();
@@ -71,7 +76,7 @@ namespace MyTasks.Controllers
 					"Dodawanie nowego zadania"
 					:
 					"Edytowanie zadania",
-				Categories = _taskService.GetCategorties()
+				Categories = _taskService.GetCategorties(userId)
 			};
 
 			return View(vm);
@@ -93,7 +98,7 @@ namespace MyTasks.Controllers
 					"Dodawanie nowego zadania"
 					:
 					"Edytowanie zadania",
-					Categories = _taskService.GetCategorties()
+					Categories = _taskService.GetCategorties(userId)
 				};
 
 				return View("Task", vm);
@@ -115,6 +120,29 @@ namespace MyTasks.Controllers
 				var userId = User.GetUserId();
 
 				_taskService.Delete(id, userId);
+			}
+			catch (Exception ex)
+			{
+				// logging
+
+				return Json(new
+				{
+					success = false,
+					message = ex.Message
+				});
+			}
+
+			return Json(new { success = true });
+		}
+
+		[HttpPost]
+		public IActionResult DeleteCategory(int id)
+		{
+			try
+			{
+				var userId = User.GetUserId();
+
+				_taskService.DeleteCategory(id, userId);
 			}
 			catch (Exception ex)
 			{

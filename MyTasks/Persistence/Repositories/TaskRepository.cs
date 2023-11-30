@@ -2,6 +2,7 @@
 using MyTasks.Core;
 using MyTasks.Core.Models.Domains;
 using MyTasks.Core.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,9 +50,10 @@ namespace MyTasks.Persistence.Repositories
 			return task;
 		}
 
-		public IEnumerable<Category> GetCategorties()
+		public IEnumerable<Category> GetCategorties(string userId)
 		{
 			return _context.Categories
+				.Where(x => x.UserId == userId || x.UserId == null)
 				.OrderBy(x => x.Name).ToList();
 		}
 
@@ -81,6 +83,21 @@ namespace MyTasks.Persistence.Repositories
 					x.UserId == userId);
 
 			_context.Tasks.Remove(taskToDelete);
+		}
+
+		public void DeleteCategory(int id, string userId)
+		{
+			var categoryToDelete = _context.Categories
+				.Include("Tasks")
+				.Single(
+					x => x.Id == id
+					&&
+					x.UserId == userId);
+
+			if (categoryToDelete.Tasks.Any())
+				throw new Exception("Kategoria posiada przypisane zadania!");
+
+			_context.Categories.Remove(categoryToDelete);
 		}
 
 		public void Finish(int id, string userId)

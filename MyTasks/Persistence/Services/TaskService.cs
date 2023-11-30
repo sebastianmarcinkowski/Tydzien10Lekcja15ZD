@@ -32,9 +32,9 @@ namespace MyTasks.Persistence.Services
 			return _unitOfWork.Task.Get(id, userId);
 		}
 
-		public IEnumerable<Category> GetCategorties()
+		public IEnumerable<Category> GetCategorties(string userId)
 		{
-			return _unitOfWork.Task.GetCategorties();
+			return _unitOfWork.Task.GetCategorties(userId);
 		}
 
 		public void Add(TaskEntity task)
@@ -52,6 +52,12 @@ namespace MyTasks.Persistence.Services
 		public void Delete(int id, string userId)
 		{
 			_unitOfWork.Task.Delete(id, userId);
+			_unitOfWork.Complete();
+		}
+
+		public void DeleteCategory(int id, string userId)
+		{
+			_unitOfWork.Task.DeleteCategory(id, userId);
 			_unitOfWork.Complete();
 		}
 

@@ -11,10 +11,11 @@ namespace MyTasks.Core.Repositories
 			int categoryId = 0,
 			string title = null);
 		TaskEntity Get(int id, string userId);
-		IEnumerable<Category> GetCategorties();
+		IEnumerable<Category> GetCategorties(string userId);
 		void Add(TaskEntity task);
 		void Update(TaskEntity task);
 		void Delete(int id, string userId);
+		void DeleteCategory(int id, string userId);
 		void Finish(int id, string userId);
 	}
 }
