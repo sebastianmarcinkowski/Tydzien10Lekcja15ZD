@@ -2,9 +2,9 @@
 
 namespace MyTasks.Core
 {
-	public interface IUnitOfWork
-	{
-		ITaskRepository Task { get; }
-		void Complete();
-	}
+    public interface IUnitOfWork
+    {
+        ITaskRepository Task { get; }
+        void Complete();
+    }
 }

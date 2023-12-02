@@ -4,22 +4,22 @@ using MyTasks.Persistence.Repositories;
 
 namespace MyTasks.Persistence
 {
-	public class UnitOfWork : IUnitOfWork
-	{
-		private readonly IApplicationDbContext _context;
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly IApplicationDbContext _context;
 
-		public UnitOfWork(IApplicationDbContext context)
-		{
-			_context = context;
+        public UnitOfWork(IApplicationDbContext context)
+        {
+            _context = context;
 
-			Task = new TaskRepository(context);
-		}
+            Task = new TaskRepository(context);
+        }
 
-		public ITaskRepository Task { get; }
+        public ITaskRepository Task { get; }
 
-		public void Complete()
-		{
-			_context.SaveChanges();
-		}
-	}
+        public void Complete()
+        {
+            _context.SaveChanges();
+        }
+    }
 }

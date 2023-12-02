@@ -164,7 +164,7 @@ namespace MyTasks.Controllers
                 else
                     _taskService.UpdateCategory(category);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 RedirectToCreateNewCategory();
             }
@@ -190,8 +190,6 @@ namespace MyTasks.Controllers
             }
             catch (Exception ex)
             {
-                // logging
-
                 return Json(new
                 {
                     success = false,
@@ -213,8 +211,6 @@ namespace MyTasks.Controllers
             }
             catch (Exception ex)
             {
-                // logging
-
                 return Json(new
                 {
                     success = false,
@@ -236,8 +232,6 @@ namespace MyTasks.Controllers
             }
             catch (Exception ex)
             {
-                // logging
-
                 return Json(new
                 {
                     success = false,
