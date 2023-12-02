@@ -37,15 +37,31 @@ namespace MyTasks.Persistence.Services
 			return _unitOfWork.Task.GetCategorties(userId);
 		}
 
+		public Category GetCategory(int id, string userId)
+        {
+			return _unitOfWork.Task.GetCategory(id, userId);
+        }
+
 		public void Add(TaskEntity task)
 		{
 			_unitOfWork.Task.Add(task);
+			_unitOfWork.Complete();
+		}
+		public void AddCategory(Category category)
+		{
+			_unitOfWork.Task.AddCategory(category);
 			_unitOfWork.Complete();
 		}
 
 		public void Update(TaskEntity task)
 		{
 			_unitOfWork.Task.Update(task);
+			_unitOfWork.Complete();
+		}
+
+		public void UpdateCategory(Category category)
+		{
+			_unitOfWork.Task.UpdateCategory(category);
 			_unitOfWork.Complete();
 		}
 

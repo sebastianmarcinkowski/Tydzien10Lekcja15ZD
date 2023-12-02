@@ -53,13 +53,30 @@ namespace MyTasks.Persistence.Repositories
 		public IEnumerable<Category> GetCategorties(string userId)
 		{
 			return _context.Categories
-				.Where(x => x.UserId == userId || x.UserId == null)
+				.Where(
+					x => x.UserId == userId
+					||
+					x.UserId == null)
 				.OrderBy(x => x.Name).ToList();
 		}
+
+		public Category GetCategory(int id, string userId)
+        {
+			return _context.Categories
+				.First(
+					x => x.Id == id
+					&&
+					x.UserId == userId);
+        }
 
 		public void Add(TaskEntity task)
 		{
 			_context.Tasks.Add(task);
+		}
+
+		public void AddCategory(Category category)
+		{
+			_context.Categories.Add(category);
 		}
 
 		public void Update(TaskEntity task)
@@ -72,6 +89,17 @@ namespace MyTasks.Persistence.Repositories
 			taskToUpdate.IsExecuted = task.IsExecuted;
 			taskToUpdate.Term = task.Term;
 			taskToUpdate.Title = task.Title;
+		}
+
+		public void UpdateCategory(Category category)
+		{
+			var categoryToUpdate = _context.Categories
+				.First(
+					x => x.Id == category.Id
+					&&
+					x.UserId == category.UserId);
+
+			categoryToUpdate.Name = category.Name;
 		}
 
 		public void Delete(int id, string userId)

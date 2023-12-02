@@ -1,0 +1,20 @@
+﻿@model MyTasks.Core.Models.Domains.Category
+
+<h1>@ViewBag.Title</h1>
+
+@using (Html.BeginForm("Category", "Task"))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.UserId)
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name,
+            new { @class = "form-control col-6", autofocus = "autofocus" })
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg mt-2">Zapisz</button>
+}

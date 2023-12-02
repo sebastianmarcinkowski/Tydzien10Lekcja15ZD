@@ -13,7 +13,8 @@ namespace MyTasks.Core.Models.Domains
 
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole Nazwa jest wymagane")]
+        [Display(Name = "Nazwa")]
         public string Name { get; set; }
         public string UserId { get; set; }
 
